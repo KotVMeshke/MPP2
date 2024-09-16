@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Task</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      color: #ff5722;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      margin-top: 20px;
+      font-size: 3em;
+      transform: rotate(-1deg);
+    }
+
+    form {
+      margin: 20px;
+      padding: 20px;
+      background: #fff;
+      border: 5px dashed #ff5722;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      transform: rotate(1deg);
+      width: 80%;
+      max-width: 400px;
+    }
+
+    label {
+      font-size: 1.2em;
+      color: #ff4081;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select,
+    input[type="file"] {
+      border: 3px dotted #ff4081;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 15px;
+      width: calc(100% - 22px);
+      background: #f1f1f1;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    input[type="file"]:focus {
+      background: #fff;
+      border-color: #ff1493;
+      outline: none;
+      box-shadow: 0 0 8px rgba(255, 20, 147, 0.4);
+    }
+
+    button {
+      background: linear-gradient(45deg, #ff4081, #ff5722);
+      border: none;
+      border-radius: 15px;
+      color: #fff;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: background 0.3s ease, transform 0.3s ease;
+      transform: skew(-5deg);
+      width: 100%;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #ff5722, #ff4081);
+      transform: skew(0deg);
+      box-shadow: 0 6px 12px rgba(255, 87, 34, 0.3);
+    }
+
+    a {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #ff5722;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2em;
+      transform: skew(-2deg);
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #ff4081;
+      text-decoration: underline;
+      transform: skew(0deg);
+    }
+  </style>
+</head>
+<body>
+  <h1>Edit Task</h1>
+  <form action="/task/<%= task.id %>?_method=Put" method="POST" enctype="multipart/form-data">
+    <label for="title">Title:</label>
+    <input type="text" name="title" id="title" value="<%= task.title %>" required>
+    <br>
+    <label for="status">Status:</label>
+    <select name="status" id="status">
+      <option value="pending" <%= task.status === 'pending' ? 'selected' : '' %>>Pending</option>
+      <option value="completed" <%= task.status === 'completed' ? 'selected' : '' %>>Completed</option>
+    </select>
+    <br>
+    <label for="dueDate">Due Date:</label>
+    <input type="date" name="dueDate" id="dueDate" value="<%= task.dueDate %>" required>
+    <br>
+    <label for="file">Replace File:</label>
+    <input type="file" name="file" id="file">
+    <br>
+    <button type="submit">Update Task</button>
+  </form>
+  <a href="/">Back to Task List</a>
+</body>
+</html>

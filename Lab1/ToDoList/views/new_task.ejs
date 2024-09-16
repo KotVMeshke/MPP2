@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        h1 {
+            display: block;
+
+            color: #ff69b4;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            font-size: 3em;
+            transform: rotate(-2deg);
+        }
+
+        form {
+            background: #fff;
+            border: 5px dashed #ff69b4;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            width: 320px;
+            transition: all 0.4s ease;
+            position: relative;
+            transform: rotate(2deg);
+        }
+
+        form:before {
+            display: block;
+
+            content: ' ';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            bottom: -10px;
+            left: -10px;
+            border: 2px solid #ff69b4;
+            border-radius: 25px;
+            z-index: -1;
+            transform: rotate(4deg);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #ff1493;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        input[type="file"] {
+            border: 3px dotted #ff1493;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            width: calc(100% - 30px);
+            background: #fdfdfd;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        input[type="file"]:focus {
+            background: #fff;
+            border-color: #ff4500;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff1493, #ff4500);
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            padding: 15px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1.2em;
+            transform: skew(-5deg);
+            transition: all 0.4s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #ff4500, #ff1493);
+            transform: skew(0deg);
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.4);
+        }
+
+        a {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: #ff69b4;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transform: skew(-2deg);
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            display: block;
+            text-decoration: underline;
+            color: #ff1493;
+            transform: skew(0deg);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Add New Task</h1>
+    <form action="/task" method="POST" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required>
+        <br>
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+        </select>
+        <br>
+        <label for="dueDate">Due Date:</label>
+        <input type="date" name="dueDate" id="dueDate" required>
+        <br>
+        <label for="file">Attach File:</label>
+        <input type="file" name="file" id="file">
+        <br>
+        <button type="submit">Add Task</button>
+    </form>
+    <a href="/">Back to Task List</a>
+</body>
+
+</html>
