@@ -47,3 +47,5 @@ Lab1/ToDoList/public/uploads/*
 
 Lab2/Server/uploads/*
 !Lab2/Server/uploads/.gitignore
+/Lab3/Uploads
+/Lab4/Uploads
