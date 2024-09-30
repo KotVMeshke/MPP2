@@ -49,3 +49,5 @@ Lab2/Server/uploads/*
 !Lab2/Server/uploads/.gitignore
 /Lab3/Uploads
 /Lab4/Uploads
+/Lab4/Server/To_Do_task_server/.vs
+/Lab3/To_do_List_Server/.vs
