@@ -84,7 +84,6 @@ app.delete('/task/:id', (req, res) => {
   res.redirect('/');
 });
 
-// Запуск сервера
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

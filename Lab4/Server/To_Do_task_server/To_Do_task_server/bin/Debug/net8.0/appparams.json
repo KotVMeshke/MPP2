@@ -1,0 +1,10 @@
+{
+  "ConnectionStrings": {
+    "SQLServerConnection": "Server=localhost; Database=movie_service;Trusted_Connection=true;Encrypt=False"
+  },
+  "JwtParameters": {
+    "Key": "GcyrkFlL3LBFf715DWIOleoRV4A1iTa8",
+    "Audience": "Audience",
+    "Issuer": "Issuer"
+  }
+}
