@@ -24,13 +24,15 @@ const TaskForm = ({ sendMessage }) => {
       Param1: title,
       Param2: status,
       Param3: dueDate,
+      Param4: null
+
     };
 
     sendMessage(JSON.stringify(requestParams),JSON.stringify(requestPayload), selectedFile);
     
     setTitle('');
     setDueDate('');
-    setStatus('pending');
+    setStatus('Pending');
     setSelectedFile(null);
   };
 

@@ -20,6 +20,7 @@ const Auth = ({ setIsAuthenticated, sendMessage}) => {
             Param1: userName,
             Param2: password,
             Param3: null, 
+            Param4: null
         };
 
         sendMessage(JSON.stringify(requestParams), JSON.stringify(requestPayload), null);

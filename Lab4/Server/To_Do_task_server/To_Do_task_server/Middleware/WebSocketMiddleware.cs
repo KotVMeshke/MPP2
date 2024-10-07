@@ -17,7 +17,7 @@ namespace To_Do_task_server.Middleware
     public class WebSocketMiddleware
     {
 
-
+        private readonly Dictionary<string,List<WebSocket>> connections = new(); 
         public WebSocketMiddleware(RequestDelegate _)
         {
 
@@ -109,7 +109,13 @@ namespace To_Do_task_server.Middleware
                                 }
 
                                 var isAdded = await taskService.AddTask(requestParams.UserName, taskDTO);
-                                await SendUpdatedTasks(webSocket, requestParams.UserName, taskService);
+                                var users = connections[requestParams!.UserName];
+                                foreach (var user in users)
+                                {
+
+                                    await SendUpdatedTasks(user, requestParams.UserName, taskService, payload.Param4);
+
+                                }
                                 break;
                             case "UPDATE":
                                 userTasks = await TaskStorage.GetTasks(requestParams.UserName, "All");
@@ -129,11 +135,23 @@ namespace To_Do_task_server.Middleware
                                 }
 
                                 await taskService.UpdateTask(requestParams.UserName, taskDTO);
-                                await SendUpdatedTasks(webSocket, requestParams.UserName, taskService);
+                                users = connections[requestParams!.UserName];
+                                foreach (var user in users)
+                                {
+
+                                    await SendUpdatedTasks(user, requestParams.UserName, taskService, payload.Param4);
+
+                                }
                                 break;
                             case "DEL":
                                 await taskService.DeleteTask(requestParams.UserName, requestParams.TaskId);
-                                await SendUpdatedTasks(webSocket, requestParams.UserName, taskService);
+                                users = connections[requestParams!.UserName];
+                                foreach (var user in users)
+                                {
+
+                                    await SendUpdatedTasks(user, requestParams.UserName, taskService, payload.Param4);
+
+                                }
                                 break;
                             case "AUTH":
                                 var accesToken = await userService.Login(payload!.Param1, payload!.Param2);
@@ -141,7 +159,16 @@ namespace To_Do_task_server.Middleware
                                 var bytes = Encoding.UTF8.GetBytes(json);
                                 await webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
                                 if (accesToken is not null)
-                                    await SendUpdatedTasks(webSocket, payload!.Param1, taskService);
+                                {
+                                    await SendUpdatedTasks(webSocket, payload!.Param1, taskService, null);
+                                    if (connections.ContainsKey(payload!.Param1))
+                                        connections[payload!.Param1].Add(webSocket);
+                                    else
+                                    {
+                                        connections.Add(payload!.Param1, new());
+                                        connections[payload!.Param1].Add(webSocket);
+                                    }
+                                }
                                 break;
                             case "REG":
                                 accesToken = await userService.Register(payload!.Param1, payload!.Param2);
@@ -149,7 +176,16 @@ namespace To_Do_task_server.Middleware
                                 bytes = Encoding.UTF8.GetBytes(json);
                                 await webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
                                 if (accesToken is not null)
-                                    await SendUpdatedTasks(webSocket, payload!.Param1, taskService);
+                                {
+                                    await SendUpdatedTasks(webSocket, payload!.Param1, taskService, null);
+                                    if (connections.ContainsKey(payload!.Param1))
+                                        connections[payload!.Param1].Add(webSocket);
+                                    else
+                                    {
+                                        connections.Add(payload!.Param1, new());
+                                        connections[payload!.Param1].Add(webSocket);
+                                    }
+                                }
                                 break;
                             default:
                                 break;
@@ -175,14 +211,8 @@ namespace To_Do_task_server.Middleware
             var tokenHandler = new JwtSecurityTokenHandler();
             var result = await tokenHandler.ValidateTokenAsync(token, new TokenValidationParameters()
             {
-                ValidAudience = config["JwtParameters:Audience"],
-                ValidateAudience = true,
-                ValidIssuer = config["JwtParameters:Issuer"],
-                ValidateIssuer = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtParameters:Key"]!)),
-                ClockSkew = TimeSpan.Zero
+               
+
             });
             return result.IsValid;
         }
@@ -227,10 +257,11 @@ namespace To_Do_task_server.Middleware
             return message.ToString();
         }
 
-        private async Task SendUpdatedTasks(WebSocket webSocket, string userName, TaskService taskService)
+        private async Task SendUpdatedTasks(WebSocket webSocket, string userName, TaskService taskService, string status)
         {
-            var tasks = await taskService.GetTasks(userName, "All");
+            var tasks = await taskService.GetTasks(userName, status ?? "All");
             var serializedTasks = JsonSerializer.Serialize(tasks);
+            if (webSocket.State == WebSocketState.Open)
             await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedTasks)), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
         }
     }

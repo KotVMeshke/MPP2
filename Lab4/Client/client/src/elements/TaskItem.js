@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TaskItem.css';
 
-const TaskItem = ({ task, deleteTask, sendMessage }) => {
+const TaskItem = ({ task, deleteTask, sendMessage, currentStatus }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleFileClick = (fileName) => {
@@ -18,7 +18,8 @@ const TaskItem = ({ task, deleteTask, sendMessage }) => {
     const requestPayload = {
       param1: fileName,
       param2: null,
-      param3: null
+      param3: null,
+      Param4: null
     }
     sendMessage(JSON.stringify(requestParams), JSON.stringify(requestPayload), null);
     console.log(`Запрос на файл ${fileName} отправлен через WebSocket.`);
@@ -32,6 +33,7 @@ const TaskItem = ({ task, deleteTask, sendMessage }) => {
           onCancel={() => setIsEditing(false)}
           onUpdate={() => setIsEditing(false)}
           sendMessage={sendMessage}
+          currentStatus={currentStatus}
         />
       ) : (
         <div className='task-info'>
@@ -53,7 +55,7 @@ const TaskItem = ({ task, deleteTask, sendMessage }) => {
   );
 };
 
-const TaskEditForm = ({ task, onUpdate, onCancel, sendMessage }) => {
+const TaskEditForm = ({ task, onUpdate, onCancel, sendMessage, currentStatus }) => {
   const [title, setTitle] = useState(task.Title);
   const [dueDate, setDueDate] = useState(task.DueDate);
   const [status, setStatus] = useState(task.Status);
@@ -74,13 +76,14 @@ const TaskEditForm = ({ task, onUpdate, onCancel, sendMessage }) => {
       Param1: title,
       Param2: status,
       Param3: dueDate,
+      Param4: currentStatus
     };
 
     sendMessage(JSON.stringify(requestParams), JSON.stringify(requestPayload), selectedFile);
 
     setTitle('');
     setDueDate('');
-    setStatus('pending');
+    setStatus('Pending');
     setSelectedFile(null);
     onUpdate();
   };

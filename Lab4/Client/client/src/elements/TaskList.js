@@ -3,7 +3,7 @@ import TaskItem from './TaskItem';
 import './TaskList.css';
 
 const TaskList = ({ tasks, setTasks, sendMessage}) => {
-  const [statusFilter, setStatusFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
 
   const deleteTask = async (id) => {
     const requestParams = {
@@ -15,7 +15,14 @@ const TaskList = ({ tasks, setTasks, sendMessage}) => {
       FileName: null, 
     };
 
-    sendMessage(JSON.stringify(requestParams), null, null);
+    const params = {
+      Param1: statusFilter,
+      Param2: null,
+      Param3: null,
+      Param4: null
+    }
+
+    sendMessage(JSON.stringify(requestParams), JSON.stringify(params), null);
   };
 
 const handleFilter = (filter) =>
@@ -32,8 +39,10 @@ const handleFilter = (filter) =>
   const requestPayload = {
     param1: filter,
     param2: null,
-    param3: null
+    param3: null,
+    Param4: null
   }
+  setStatusFilter(filter);
   sendMessage(JSON.stringify(requestParams), JSON.stringify(requestPayload), null);
 }
 
@@ -52,6 +61,7 @@ const handleFilter = (filter) =>
             task={task}
             deleteTask={deleteTask}
             sendMessage={sendMessage}
+            currentStatus={statusFilter}
           />
         ))}
       </ul>
