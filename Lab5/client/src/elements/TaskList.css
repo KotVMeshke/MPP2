@@ -1,0 +1,17 @@
+
+.task-list {
+    margin-top: 20px;
+  }
+  
+  .task-list select {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 2px solid #ff6f61;
+    border-radius: 5px;
+  }
+  
+  .task-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
